@@ -24,6 +24,7 @@ public class MyStreamListener implements StatusListener{
 	private String lastDateString=null;
 	private GZIPOutputStream gzipOutputStream=null;
 	private String savePath=null;
+	private BufferedWriter fileNameWriter=null;
 	public MyStreamListener(){
 		lastDateString="";
 		savePath=".\\";
@@ -51,20 +52,22 @@ public class MyStreamListener implements StatusListener{
 	}
 
 	public void onStatus(Status status) {
-		System.out.println(status.toString());
 		String currentDateString=(new SimpleDateFormat("yyyy-MM-dd-HH")).format(status.getCreatedAt());
 		if(!lastDateString.equals(currentDateString)){
-			lastDateString=currentDateString;
 			try {
 				if(this.gzipOutputStream!=null){
 					this.gzipOutputStream.flush();
 					this.gzipOutputStream.close();
+					fileNameWriter=new BufferedWriter(new FileWriter(new File("./transmission.txt")));
+					fileNameWriter.write(lastDateString);
+					fileNameWriter.flush();
+					fileNameWriter.close();
 				}
-				System.out.println(this.savePath+"statuses."+currentDateString+".tar");
+				lastDateString=currentDateString;
+				System.out.println(this.savePath+"statuses."+currentDateString+".zip");
 				this.gzipOutputStream=new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(this.savePath+"statuses."+currentDateString+".zip",true)));
 				this.gzipOutputStream.write(status.toString().getBytes());
 				this.gzipOutputStream.write("\r\n".getBytes());
-				
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

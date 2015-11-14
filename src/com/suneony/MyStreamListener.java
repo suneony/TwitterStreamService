@@ -59,7 +59,7 @@ public class MyStreamListener implements StatusListener{
 					this.gzipOutputStream.flush();
 					this.gzipOutputStream.close();
 					fileNameWriter=new BufferedWriter(new FileWriter(new File("./transmission.txt")));
-					fileNameWriter.write(lastDateString);
+					fileNameWriter.write("statuses."+lastDateString+".zip");
 					fileNameWriter.flush();
 					fileNameWriter.close();
 				}

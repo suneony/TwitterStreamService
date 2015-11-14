@@ -22,7 +22,7 @@ public class StreamSource {
 	}
 	public static void main(String[] args){
 		StreamInstance streamInstance=new StreamInstance();
-		StreamSource streamSource=new StreamSource(streamInstance.connect(),"C:\\Users\\admin\\Desktop\\suneony\\temp\\");
+		StreamSource streamSource=new StreamSource(streamInstance.connect(),args[0]);
 		streamSource.generate();
 	}
 }

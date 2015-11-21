@@ -19,19 +19,22 @@ import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
+import twitter4j.json.DataObjectFactory;
 
 public class MyStreamListener implements StatusListener{
 	private String lastDateString=null;
 	private GZIPOutputStream gzipOutputStream=null;
 	private String savePath=null;
-	private BufferedWriter fileNameWriter=null;
+	private String inQueuePath=null;
+	private BufferedWriter inQueueWriter=null;
 	public MyStreamListener(){
 		lastDateString="";
 		savePath=".\\";
 	}
-	public MyStreamListener(String savePath){
+	public MyStreamListener(String savePath,String inQueuePath){
 		lastDateString="";
 		this.savePath=savePath;
+		this.inQueuePath=inQueuePath;
 	}
 	
 	private int count=0;
@@ -52,31 +55,33 @@ public class MyStreamListener implements StatusListener{
 	}
 
 	public void onStatus(Status status) {
-		String currentDateString=(new SimpleDateFormat("yyyy-MM-dd-HH")).format(status.getCreatedAt());
+		String jsonString=DataObjectFactory.getRawJSON(status);
+		String currentDateString=(new SimpleDateFormat("yyyy-MM-dd-HH")).format(status.getCreatedAt());	
 		if(!lastDateString.equals(currentDateString)){
 			try {
 				if(this.gzipOutputStream!=null){
 					this.gzipOutputStream.flush();
 					this.gzipOutputStream.close();
-					fileNameWriter=new BufferedWriter(new FileWriter(new File("./transmission.txt")));
-					fileNameWriter.write("statuses."+lastDateString+".zip");
-					fileNameWriter.flush();
-					fileNameWriter.close();
+					System.out.println(this.inQueuePath);
+					inQueueWriter=new BufferedWriter(new FileWriter(new File(this.inQueuePath),true));
+					inQueueWriter.write("statuses."+lastDateString+".zip");
+					inQueueWriter.newLine();
+					inQueueWriter.flush();
+					inQueueWriter.close();
 				}
 				lastDateString=currentDateString;
 				System.out.println(this.savePath+"statuses."+currentDateString+".zip");
 				this.gzipOutputStream=new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(this.savePath+"statuses."+currentDateString+".zip",true)));
-				this.gzipOutputStream.write(status.toString().getBytes());
+				this.gzipOutputStream.write(jsonString.getBytes());
 				this.gzipOutputStream.write("\r\n".getBytes());
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
 		}else{
 			try {
-				this.gzipOutputStream.write(status.toString().getBytes());
+				this.gzipOutputStream.write(jsonString.getBytes());
 				this.gzipOutputStream.write("\r\n".getBytes());
 			} catch (IOException e) {
 				e.printStackTrace();

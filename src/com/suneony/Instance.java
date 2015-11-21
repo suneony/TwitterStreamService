@@ -7,9 +7,9 @@ public class Instance {
 
 	public Instance() {
 		cb = new ConfigurationBuilder();
-		cb.setDebugEnabled(true).setOAuthConsumerKey("YTvq84wxSAgJwtv0CDP42fmX9")
-				.setOAuthConsumerSecret("nzNr82NTAiMMCgjQyN8Z5BDl71I1kUkqSsCg9zyyAMEdPuLvrw")
-				.setOAuthAccessToken("3645009020-MeicCdgCaJoR7nAboBfMReXWyjCrowTirmmP7Lc")
-				.setOAuthAccessTokenSecret("mLcZNRVnnFVq7FfmgktH79qnwNtvKykMWIem4C0TBO45H");
+		cb.setDebugEnabled(true).setOAuthConsumerKey("UIq2t0CAaCeWYhHxCd3rpzWnu")
+				.setOAuthConsumerSecret("1LwR7RUYupoEtfJh5aLCLXIUHrA8HyU7xxP63SWeUFbslaE0ek")
+				.setOAuthAccessToken("3645009020-UduprILldhpW0YCURAzQpL6sCOQvxUhpt51xCON")
+				.setOAuthAccessTokenSecret("H6aosHeAorg9t6atLTQWqvgOCG44kOPj6j9us7DtoWeAM");
 	}
 }
